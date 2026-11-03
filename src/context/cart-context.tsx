@@ -8,16 +8,16 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { PRODUCTS } from "@/lib/products";
+import { useStore } from "@/context/store-context";
 
-export type CartItem = { id: number; qty: number };
+export type CartItem = { id: string; size: string; qty: number };
 
 type CartContextValue = {
   items: CartItem[];
   count: number;
   total: number;
-  add: (id: number) => void;
-  change: (id: number, delta: number) => void;
+  add: (id: string, size: string) => void;
+  change: (id: string, size: string, delta: number) => void;
   clear: () => void;
   toast: string | null;
   notice: (message: string) => void;
@@ -26,6 +26,7 @@ type CartContextValue = {
 const CartContext = createContext<CartContextValue | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
+  const { products } = useStore();
   const [items, setItems] = useState<CartItem[]>([]);
   const [toast, setToast] = useState<string | null>(null);
 
@@ -35,26 +36,26 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const add = useCallback(
-    (id: number) => {
+    (id: string, size: string) => {
       setItems((prev) => {
-        const existing = prev.find((item) => item.id === id);
+        const existing = prev.find((item) => item.id === id && item.size === size);
         if (existing) {
           return prev.map((item) =>
-            item.id === id ? { ...item, qty: item.qty + 1 } : item,
+            item.id === id && item.size === size ? { ...item, qty: item.qty + 1 } : item,
           );
         }
-        return [...prev, { id, qty: 1 }];
+        return [...prev, { id, size, qty: 1 }];
       });
       notice("Produto adicionado ao carrinho");
     },
     [notice],
   );
 
-  const change = useCallback((id: number, delta: number) => {
+  const change = useCallback((id: string, size: string, delta: number) => {
     setItems((prev) =>
       prev
         .map((item) =>
-          item.id === id ? { ...item, qty: item.qty + delta } : item,
+          item.id === id && item.size === size ? { ...item, qty: item.qty + delta } : item,
         )
         .filter((item) => item.qty > 0),
     );
@@ -70,10 +71,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const total = useMemo(
     () =>
       items.reduce((sum, item) => {
-        const product = PRODUCTS.find((p) => p.id === item.id);
+        const product = products.find((entry) => entry.id === item.id);
         return sum + (product?.price ?? 0) * item.qty;
       }, 0),
-    [items],
+    [items, products],
   );
 
   const value = useMemo(
@@ -85,7 +86,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 }
 
 export function useCart() {
-  const ctx = useContext(CartContext);
-  if (!ctx) throw new Error("useCart must be used within CartProvider");
-  return ctx;
+  const context = useContext(CartContext);
+  if (!context) throw new Error("useCart must be used within CartProvider");
+  return context;
 }

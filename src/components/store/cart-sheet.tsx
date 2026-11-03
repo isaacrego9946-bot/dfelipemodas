@@ -10,8 +10,10 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { ProductPhoto } from "@/components/store/product-photo";
 import { useCart } from "@/context/cart-context";
-import { PRODUCTS, formatMoney } from "@/lib/products";
+import { useStore } from "@/context/store-context";
+import { formatMoney } from "@/lib/catalog";
 import { CheckoutDialog } from "@/components/store/checkout-dialog";
 
 type CartSheetProps = {
@@ -21,6 +23,7 @@ type CartSheetProps = {
 
 export function CartSheet({ open, onOpenChange }: CartSheetProps) {
   const { items, total, change, notice } = useCart();
+  const { products } = useStore();
   const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   return (
@@ -49,26 +52,31 @@ export function CartSheet({ open, onOpenChange }: CartSheetProps) {
               </div>
             ) : (
               items.map((item) => {
-                const product = PRODUCTS.find((p) => p.id === item.id);
+                const product = products.find((entry) => entry.id === item.id);
                 if (!product) return null;
                 return (
                   <div
-                    key={item.id}
+                    key={`${item.id}-${item.size}`}
                     className="grid grid-cols-[58px_1fr_auto] items-center gap-2.5 border-b border-border py-3.5"
                   >
-                    <div className="product-visual grid h-[70px] w-[58px] place-items-center font-display text-[11px] text-white/30">
+                    <div className="product-visual relative grid h-[70px] w-[58px] place-items-center overflow-hidden font-display text-[11px] text-white/30">
+                      <ProductPhoto
+                        url={product.images[0]}
+                        alt=""
+                        className="absolute inset-0 h-full w-full object-cover"
+                      />
                       DF
                     </div>
                     <div>
                       <h4 className="text-xs font-normal">{product.name}</h4>
                       <p className="mt-1 text-xs text-gold-soft">
-                        {formatMoney(product.price)}
+                        {formatMoney(product.price)} · tam. {item.size}
                       </p>
                       <div className="mt-2 flex items-center gap-2">
                         <button
                           type="button"
                           className="size-[22px] border border-[#555] text-foreground"
-                          onClick={() => change(product.id, -1)}
+                          onClick={() => change(product.id, item.size, -1)}
                         >
                           −
                         </button>
@@ -76,7 +84,7 @@ export function CartSheet({ open, onOpenChange }: CartSheetProps) {
                         <button
                           type="button"
                           className="size-[22px] border border-[#555] text-foreground"
-                          onClick={() => change(product.id, 1)}
+                          onClick={() => change(product.id, item.size, 1)}
                         >
                           +
                         </button>
@@ -86,7 +94,7 @@ export function CartSheet({ open, onOpenChange }: CartSheetProps) {
                       type="button"
                       className="text-[19px] text-[#aaa]"
                       aria-label="Remover"
-                      onClick={() => change(product.id, -item.qty)}
+                      onClick={() => change(product.id, item.size, -item.qty)}
                     >
                       ×
                     </button>

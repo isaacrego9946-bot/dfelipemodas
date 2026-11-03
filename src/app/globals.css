@@ -175,3 +175,28 @@
 .category-tile:nth-child(3) {
   background: linear-gradient(140deg, #684b2d, #111);
 }
+
+.receipt {
+  display: none;
+}
+
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+
+  .receipt,
+  .receipt * {
+    visibility: visible !important;
+  }
+
+  .receipt {
+    display: block !important;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    background: white;
+    color: black;
+    padding: 28px;
+  }
+}

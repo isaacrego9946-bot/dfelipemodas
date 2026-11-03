@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { Category } from "@/lib/products";
-import { CartProvider } from "@/context/cart-context";
+import type { Category } from "@/lib/catalog";
 import { SiteHeader } from "@/components/store/site-header";
 import { Hero } from "@/components/store/hero";
 import { Categories } from "@/components/store/categories";
@@ -16,19 +15,17 @@ export function StorePage() {
   const [active, setActive] = useState<Category | "todos">("todos");
 
   return (
-    <CartProvider>
-      <div className="min-h-screen bg-background text-foreground">
-        <SiteHeader />
-        <main>
-          <Hero />
-          <Categories onSelect={setActive} />
-          <Shop active={active} onFilterChange={setActive} />
-          <Promo />
-        </main>
-        <SiteFooter />
-        <WhatsappButton />
-        <Toast />
-      </div>
-    </CartProvider>
+    <div className="min-h-screen bg-background text-foreground">
+      <SiteHeader />
+      <main>
+        <Hero />
+        <Categories onSelect={setActive} />
+        <Shop active={active} onFilterChange={setActive} />
+        <Promo />
+      </main>
+      <SiteFooter />
+      <WhatsappButton />
+      <Toast />
+    </div>
   );
 }

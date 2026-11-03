@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function SiteFooter() {
   return (
     <footer className="grid gap-6 border-t border-border px-4 py-8 text-[11px] text-muted-foreground md:flex md:justify-between md:px-[6%] md:py-[42px]">
@@ -18,8 +20,11 @@ export function SiteFooter() {
         <a href="mailto:contato@sualoja.com" className="hover:text-gold">
           Contato
         </a>
+        <Link href="/admin" className="hover:text-gold">
+          Painel
+        </Link>
       </div>
-      <div>© 2026 D Felipe Modas. Loja demonstrativa.</div>
+      <div>© 2026 D Felipe Modas.</div>
     </footer>
   );
 }

@@ -1,7 +1,12 @@
+"use client";
+
+import { useStore } from "@/context/store-context";
+
 export function WhatsappButton() {
+  const { whatsapp, shopName } = useStore();
   const href =
-    "https://wa.me/5516999999999?text=" +
-    encodeURIComponent("Olá, gostaria de saber mais sobre a loja D Felipe Modas.");
+    `https://wa.me/${whatsapp}?text=` +
+    encodeURIComponent(`Olá, gostaria de saber mais sobre a loja ${shopName}.`);
 
   return (
     <a

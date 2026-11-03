@@ -1,6 +1,6 @@
 "use client";
 
-import type { Category } from "@/lib/products";
+import type { Category } from "@/lib/catalog";
 
 const tiles: { id: Category; title: string }[] = [
   { id: "feminino", title: "Feminino" },
