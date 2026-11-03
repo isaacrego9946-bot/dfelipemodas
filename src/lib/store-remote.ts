@@ -1,29 +1,40 @@
 import type { StoreFile } from "@/lib/catalog";
+import { BINS_API_URL, STORE_API_URL, STORE_EDIT_TOKEN, STORE_PUBLIC_URL } from "@/lib/store-config";
 
-const apiBase = process.env.NEXT_PUBLIC_STORE_API ?? "";
+const proxy = "https://proxy.corsfix.com/?";
+
+function throughProxy(url: string) {
+  return `${proxy}${url}`;
+}
+
+function cleanEtag(value: string | null) {
+  return (value ?? "").replace(/^W\//, "");
+}
 
 export async function readStore() {
-  const response = await fetch(`${apiBase}/api/store`, { cache: "no-store" });
+  const response = await fetch(throughProxy(STORE_PUBLIC_URL), { cache: "no-store" });
   if (!response.ok) throw new Error("Não foi possível ler o banco da loja.");
   const data = (await response.json()) as StoreFile;
   if (!data || data.version !== 1 || !Array.isArray(data.products)) {
     throw new Error("O banco da loja ainda não está pronto.");
   }
-  return { data, etag: response.headers.get("x-store-etag") ?? "" };
+  return { data, etag: cleanEtag(response.headers.get("etag")) };
 }
 
 export async function writeStore(data: StoreFile, etag: string) {
-  const response = await fetch(`${apiBase}/api/store`, {
+  const response = await fetch(throughProxy(STORE_API_URL), {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      ...(etag ? { "X-Store-Etag": etag } : {}),
+      Authorization: `Bearer ${STORE_EDIT_TOKEN}`,
+      ...(etag ? { "If-Match": etag } : {}),
     },
     body: JSON.stringify(data),
   });
   if (response.status === 412) return { conflict: true as const };
   if (!response.ok) throw new Error("Não foi possível salvar no banco da loja.");
-  return { conflict: false as const, etag: response.headers.get("x-store-etag") ?? "" };
+  const body = (await response.json()) as { etag?: string };
+  return { conflict: false as const, etag: cleanEtag(body.etag ?? response.headers.get("etag")) };
 }
 
 export async function updateStore(mutator: (data: StoreFile) => Promise<StoreFile> | StoreFile) {
@@ -40,7 +51,7 @@ export async function updateStore(mutator: (data: StoreFile) => Promise<StoreFil
 }
 
 export async function uploadPhoto(dataUrl: string) {
-  const response = await fetch(`${apiBase}/api/photos`, {
+  const response = await fetch(throughProxy(BINS_API_URL), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ dataUrl }),

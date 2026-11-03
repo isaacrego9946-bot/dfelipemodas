@@ -24,4 +24,4 @@ Os dados de quem compra ficam protegidos pela senha do painel. Exporte um backup
 
 ## Endereço público
 
-A loja que grava pedidos está em [https://fleet-opal-g0w5l4c.tmp.now](https://fleet-opal-g0w5l4c.tmp.now). O endereço antigo do GitHub Pages encaminha para ela. Esse endereço de demonstração expira se ninguém reivindicar a publicação na Vercel.
+A loja fica em [https://isaacrego9946-bot.github.io/dfelipemodas/](https://isaacrego9946-bot.github.io/dfelipemodas/). O acesso do lojista é o link Painel no final da página.
