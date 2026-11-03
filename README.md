@@ -9,9 +9,7 @@ npm install
 npm run dev -- --port 43123
 ```
 
-Abra [http://127.0.0.1:43123](http://127.0.0.1:43123). O painel fica em [http://127.0.0.1:43123/admin](http://127.0.0.1:43123/admin).
-
-A senha inicial é `dfelipe`. Troque em Ajustes depois do primeiro acesso.
+Abra [http://127.0.0.1:43123](http://127.0.0.1:43123). O acesso do lojista fica no rodapé da loja, no link Painel.
 
 ## O que o painel faz
 
@@ -26,4 +24,4 @@ Os dados de quem compra ficam protegidos pela senha do painel. Exporte um backup
 
 ## Endereço público
 
-A loja que grava pedidos está em [https://quick-tundra-0snfoto.tmp.now](https://quick-tundra-0snfoto.tmp.now). O endereço antigo do GitHub Pages encaminha para ela. Esse endereço de demonstração expira se ninguém reivindicar a publicação na Vercel.
+A loja que grava pedidos está em [https://fleet-opal-g0w5l4c.tmp.now](https://fleet-opal-g0w5l4c.tmp.now). O endereço antigo do GitHub Pages encaminha para ela. Esse endereço de demonstração expira se ninguém reivindicar a publicação na Vercel.

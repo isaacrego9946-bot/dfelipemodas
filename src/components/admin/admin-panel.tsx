@@ -82,9 +82,6 @@ export function AdminPanel() {
         <form onSubmit={enter} className="mx-auto mt-16 w-[min(420px,calc(100%-32px))] border border-[#5d4725] bg-[#111] p-7">
           <p className="text-[10px] font-bold tracking-[3px] text-gold uppercase">Acesso</p>
           <h2 className="mt-2 font-display text-4xl">Entrar</h2>
-          <p className="mt-3 text-sm text-[#bbb]">
-            A senha inicial é <strong className="text-[#f6f1e8]">dfelipe</strong>. Troque em Ajustes depois do primeiro acesso.
-          </p>
           <Input
             type="password"
             value={pin}

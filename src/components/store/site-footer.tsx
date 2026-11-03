@@ -20,11 +20,13 @@ export function SiteFooter() {
         <a href="mailto:contato@sualoja.com" className="hover:text-gold">
           Contato
         </a>
-        <Link href="/admin" className="hover:text-gold">
+      </div>
+      <div>
+        © 2026 D Felipe Modas.
+        <Link href="/admin" className="ml-3 text-[10px] text-[#5c564c] hover:text-gold">
           Painel
         </Link>
       </div>
-      <div>© 2026 D Felipe Modas.</div>
     </footer>
   );
 }
